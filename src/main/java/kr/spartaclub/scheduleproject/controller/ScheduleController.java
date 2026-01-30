@@ -3,7 +3,6 @@ package kr.spartaclub.scheduleproject.controller;
 import kr.spartaclub.scheduleproject.dto.*;
 import kr.spartaclub.scheduleproject.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +12,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class ScheduleController {
+
     private final ScheduleService scheduleService;
 
     // 일정 생성
@@ -44,5 +44,11 @@ public class ScheduleController {
     public ResponseEntity<Void> deleteSchedule(@PathVariable Long id, @RequestBody DeleteScheduleRequest request) {
         scheduleService.deleteSchedule(id, request);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    // 댓글 생성
+    @PostMapping("/schedules/{scheduleId}/comments")
+    public ResponseEntity<CreateCommentResponse> createComment(@PathVariable Long scheduleId, @RequestBody CreateCommentRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(scheduleService.saveComment(scheduleId, request));
     }
 }
