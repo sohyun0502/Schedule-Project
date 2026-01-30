@@ -21,6 +21,10 @@ public class ScheduleService {
     // 일정 생성
     @Transactional
     public CreateScheduleResponse saveSchedule(CreateScheduleRequest request) {
+
+        // 유효성 체크
+        validateCreateSchedule(request);
+
         Schedule schedule = new Schedule(
                 request.getTitle(),
                 request.getContent(),
@@ -36,6 +40,34 @@ public class ScheduleService {
                 savedSchedule.getCreatedAt(),
                 savedSchedule.getModifiedAt()
         );
+    }
+
+    private void validateCreateSchedule(CreateScheduleRequest request) {
+        // 제목
+        if (request.getTitle() == null || request.getTitle().isBlank()) {
+            throw new IllegalArgumentException("일정 제목은 필수입니다.");
+        }
+        if (request.getTitle().length() > 30) {
+            throw new IllegalArgumentException("일정 제목은 30자 이내여야 합니다.");
+        }
+
+        // 내용
+        if (request.getContent() == null || request.getContent().isBlank()) {
+            throw new IllegalArgumentException("일정 내용은 필수입니다.");
+        }
+        if (request.getContent().length() > 200) {
+            throw new IllegalArgumentException("일정 내용은 200자 이내여야 합니다.");
+        }
+
+        // 작성자명
+        if (request.getName() == null || request.getName().isBlank()) {
+            throw new IllegalArgumentException("작성자명은 필수입니다.");
+        }
+
+        // 비밀번호
+        if (request.getPassword() == null || request.getPassword().isBlank()) {
+            throw new IllegalArgumentException("비밀번호는 필수입니다.");
+        }
     }
 
     // 일정 조회 - 선택 일정 조회
@@ -132,6 +164,10 @@ public class ScheduleService {
     // 댓글 생성
     @Transactional
     public CreateCommentResponse saveComment(Long scheduleId, CreateCommentRequest request) {
+        
+        // 유효성 체크
+        validateCreateComment(request);
+        
         // 해당 일정 조회
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
                 () -> new IllegalStateException("없는 일정입니다.")
@@ -159,5 +195,23 @@ public class ScheduleService {
                 savedComment.getCreatedAt(),
                 savedComment.getModifiedAt()
         );
+    }
+
+    private void validateCreateComment(CreateCommentRequest request) {
+        if (request.getContent() == null || request.getContent().isBlank()) {
+            throw new IllegalArgumentException("댓글 내용은 필수입니다.");
+        }
+
+        if (request.getContent().length() > 100) {
+            throw new IllegalArgumentException("댓글 내용은 100자 이내여야 합니다.");
+        }
+
+        if (request.getName() == null || request.getName().isBlank()) {
+            throw new IllegalArgumentException("작성자명은 필수입니다.");
+        }
+
+        if (request.getPassword() == null || request.getPassword().isBlank()) {
+            throw new IllegalArgumentException("비밀번호는 필수입니다.");
+        }
     }
 }
