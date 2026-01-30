@@ -1,10 +1,9 @@
 package kr.spartaclub.scheduleproject.controller;
 
-import kr.spartaclub.scheduleproject.dto.CreateScheduleRequest;
-import kr.spartaclub.scheduleproject.dto.CreateScheduleResponse;
-import kr.spartaclub.scheduleproject.dto.GetScheduleResponse;
+import kr.spartaclub.scheduleproject.dto.*;
 import kr.spartaclub.scheduleproject.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +34,11 @@ public class ScheduleController {
     }
 
     // 일정 수정
+    @PutMapping("/schedules/{id}")
+    public ResponseEntity<UpdateScheduleResponse> updateSchedule(@PathVariable Long id, @RequestBody UpdateScheduleRequest request) {
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.updateSchedule(id, request));
+    }
+
 
     // 일정 삭제
 }

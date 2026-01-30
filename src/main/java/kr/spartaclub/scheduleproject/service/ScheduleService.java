@@ -1,8 +1,6 @@
 package kr.spartaclub.scheduleproject.service;
 
-import kr.spartaclub.scheduleproject.dto.CreateScheduleRequest;
-import kr.spartaclub.scheduleproject.dto.CreateScheduleResponse;
-import kr.spartaclub.scheduleproject.dto.GetScheduleResponse;
+import kr.spartaclub.scheduleproject.dto.*;
 import kr.spartaclub.scheduleproject.entity.Schedule;
 import kr.spartaclub.scheduleproject.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
@@ -53,6 +51,7 @@ public class ScheduleService {
     }
 
     // 일정 조회 - 전체 일정 조회
+    @Transactional(readOnly = true)
     public List<GetScheduleResponse> findAllSchedules(String name) {
         List<Schedule> schedules;
         if (name == null) {
@@ -72,5 +71,28 @@ public class ScheduleService {
                 )
         ).toList();
 
+    }
+
+    // 일정 수정
+    @Transactional
+    public UpdateScheduleResponse updateSchedule(Long id, UpdateScheduleRequest request) {
+        Schedule schedule = scheduleRepository.findById(id).orElseThrow(
+                () -> new IllegalStateException("없는 일정입니다.")
+        );
+
+        // 비밀번호 검증
+        if (!schedule.getPassword().equals(request.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        schedule.update(request.getTitle(), request.getName());
+        return new UpdateScheduleResponse(
+                schedule.getId(),
+                schedule.getTitle(),
+                schedule.getContent(),
+                schedule.getName(),
+                schedule.getCreatedAt(),
+                schedule.getModifiedAt()
+        );
     }
 }
