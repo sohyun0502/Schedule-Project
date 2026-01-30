@@ -40,23 +40,37 @@ public class ScheduleService {
 
     // 일정 조회 - 선택 일정 조회
     @Transactional(readOnly = true)
-    public GetScheduleResponse findOneSchedule(Long id) {
+    public GetOneScheduleResponse findOneSchedule(Long id) {
         Schedule schedule = scheduleRepository.findById(id).orElseThrow(
                 () -> new IllegalStateException("없는 일정입니다.")
         );
-        return new GetScheduleResponse(
+
+        // 선택한 일정의 댓글 리스트 조회
+        List<Comment> commentList = commentRepository.findByScheduleId(id);
+        List<GetCommentResponse> comments = commentList.stream().map(
+                comment -> new GetCommentResponse(
+                        comment.getId(),
+                        comment.getContent(),
+                        comment.getName(),
+                        comment.getCreatedAt(),
+                        comment.getModifiedAt()
+                )
+        ).toList();
+
+        return new GetOneScheduleResponse(
                 schedule.getId(),
                 schedule.getTitle(),
                 schedule.getContent(),
                 schedule.getName(),
                 schedule.getCreatedAt(),
-                schedule.getModifiedAt()
+                schedule.getModifiedAt(),
+                comments
         );
     }
 
     // 일정 조회 - 전체 일정 조회
     @Transactional(readOnly = true)
-    public List<GetScheduleResponse> findAllSchedules(String name) {
+    public List<GetAllScheduleResponse> findAllSchedules(String name) {
         List<Schedule> schedules;
         if (name == null) {
             schedules = scheduleRepository.findAllByOrderByModifiedAtDesc();
@@ -65,7 +79,7 @@ public class ScheduleService {
         }
 
         return schedules.stream().map(
-                schedule -> new GetScheduleResponse(
+                schedule -> new GetAllScheduleResponse(
                         schedule.getId(),
                         schedule.getTitle(),
                         schedule.getContent(),

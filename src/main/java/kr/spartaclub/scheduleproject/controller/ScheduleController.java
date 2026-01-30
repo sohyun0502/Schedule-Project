@@ -1,5 +1,6 @@
 package kr.spartaclub.scheduleproject.controller;
 
+import jakarta.validation.Valid;
 import kr.spartaclub.scheduleproject.dto.*;
 import kr.spartaclub.scheduleproject.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
@@ -17,19 +18,19 @@ public class ScheduleController {
 
     // 일정 생성
     @PostMapping("/schedules")
-    public ResponseEntity<CreateScheduleResponse> createSchedule(@RequestBody CreateScheduleRequest request) {
+    public ResponseEntity<CreateScheduleResponse> createSchedule(@Valid @RequestBody CreateScheduleRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(scheduleService.saveSchedule(request));
     }
 
     // 일정 조회 - 선택 일정 조회
     @GetMapping("/schedules/{id}")
-    public ResponseEntity<GetScheduleResponse> getOneSchedule(@PathVariable Long id) {
+    public ResponseEntity<GetOneScheduleResponse> getOneSchedule(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(scheduleService.findOneSchedule(id));
     }
 
     // 일정 조회 - 전체 일정 조회
     @GetMapping("/schedules")
-    public ResponseEntity<List<GetScheduleResponse>> getAllSchedules(@RequestParam(required = false) String name) {
+    public ResponseEntity<List<GetAllScheduleResponse>> getAllSchedules(@RequestParam(required = false) String name) {
         return ResponseEntity.status(HttpStatus.OK).body(scheduleService.findAllSchedules(name));
     }
 
@@ -48,7 +49,7 @@ public class ScheduleController {
 
     // 댓글 생성
     @PostMapping("/schedules/{scheduleId}/comments")
-    public ResponseEntity<CreateCommentResponse> createComment(@PathVariable Long scheduleId, @RequestBody CreateCommentRequest request) {
+    public ResponseEntity<CreateCommentResponse> createComment(@PathVariable Long scheduleId, @Valid @RequestBody CreateCommentRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(scheduleService.saveComment(scheduleId, request));
     }
 }
