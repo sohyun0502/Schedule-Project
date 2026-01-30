@@ -2,13 +2,12 @@ package kr.spartaclub.scheduleproject.controller;
 
 import kr.spartaclub.scheduleproject.dto.CreateScheduleRequest;
 import kr.spartaclub.scheduleproject.dto.CreateScheduleResponse;
+import kr.spartaclub.scheduleproject.dto.GetScheduleResponse;
 import kr.spartaclub.scheduleproject.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,6 +21,10 @@ public class ScheduleController {
     }
 
     // 일정 조회 - 선택 일정 조회
+    @GetMapping("/schedules/{id}")
+    public ResponseEntity<GetScheduleResponse> getOneSchedule(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.findOneSchedule(id));
+    }
 
     // 일정 조회 - 전체 일정 조회
 
