@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ScheduleService {
@@ -48,5 +50,27 @@ public class ScheduleService {
                 schedule.getCreatedAt(),
                 schedule.getModifiedAt()
         );
+    }
+
+    // 일정 조회 - 전체 일정 조회
+    public List<GetScheduleResponse> findAllSchedules(String name) {
+        List<Schedule> schedules;
+        if (name == null) {
+            schedules = scheduleRepository.findAllByOrderByModifiedAtDesc();
+        } else {
+            schedules = scheduleRepository.findByNameOrderByModifiedAtDesc(name);
+        }
+
+        return schedules.stream().map(
+                schedule -> new GetScheduleResponse(
+                        schedule.getId(),
+                        schedule.getTitle(),
+                        schedule.getContent(),
+                        schedule.getName(),
+                        schedule.getCreatedAt(),
+                        schedule.getModifiedAt()
+                )
+        ).toList();
+
     }
 }
