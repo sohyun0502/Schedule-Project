@@ -73,14 +73,14 @@ Content-Type: application/json
 
 ---
 
-## 2️⃣ 사용자 생성 API
+## 2️⃣ 일정 조회 (선택 일정 조회) API
 
 ### 🔹 API 정보
 - **API 명**: 선택 일정 조회
 - **Method**: `GET`
 - **URL**: `/schedules/{id}`
 
-### 🔹 Path Parameter
+### 🔹 Path Variable
 | 이름 | 타입 | 필수 | 설명    |
 |----|----|----|-------|
 | id | Long | O | 일정 ID |
@@ -88,24 +88,37 @@ Content-Type: application/json
 ### 🔹 Response Example (200 OK)
 ```json
 {
-  "id": 1,
-  "title": "오늘의 일정",
-  "content": "헬스 PT 8시",
-  "name": "홍길동",
-  "createdAt": "2026-01-30T20:26:01.5576386",
-  "modifiedAt": "2026-01-30T20:26:01.5576386",
-  "comments": []
+  "id": 2,
+  "title": "오늘의 일정2",
+  "content": "공휴일",
+  "name": "김모씨",
+  "createdAt": "2026-01-31T14:27:17.430227",
+  "modifiedAt": "2026-01-31T14:27:17.430227",
+  "comments": [
+    {
+      "id": 1,
+      "content": "댓글1",
+      "name": "김모씨",
+      "createdAt": "2026-01-31T14:46:09.384358",
+      "modifiedAt": "2026-01-31T14:46:09.384358"
+    }
+  ]
 }
 ```
 
 ---
 
-## 2️⃣ 사용자 생성 API
+## 3️⃣ 일정 조회 (전체 일정 조회) API
 
 ### 🔹 API 정보
 - **API 명**: 전체 일정 조회
 - **Method**: `GET`
 - **URL**: `/schedules`
+
+### 🔹 Query Parameter
+| 이름 | 타입 | 필수 | 설명  |
+|----|----|---|-----|
+| name | String | X | 작성자명 |
 
 ### 🔹 Response Example (200 OK)
 ```json
@@ -131,6 +144,101 @@ Content-Type: application/json
 
 ---
 
+## 4️⃣ 일정 수정 API
+
+### 🔹 API 정보
+- **API 명**: 일정 수정
+- **Method**: `PUT`
+- **URL**: `/schedules/{id}`
+
+### 🔹 Path Variable
+| 이름 | 타입 | 필수 | 설명    |
+|----|----|----|-------|
+| id | Long | O | 일정 ID |
+
+### 🔹 Request Example
+```json
+{
+  "title":"오늘의 일정3",
+  "name":"김길동",
+  "password":"password123"
+}
+```
+
+### 🔹 Response Example (200 OK)
+```json
+{
+  "id": 1,
+  "title": "오늘의 일정3",
+  "content": "헬스 PT 8시",
+  "name": "김길동",
+  "createdAt": "2026-01-31T14:26:11.838603",
+  "modifiedAt": "2026-01-31T14:26:11.838603"
+}
+```
+
+---
+
+## 5️⃣ 일정 삭제 API
+
+### 🔹 API 정보
+- **API 명**: 일정 삭제
+- **Method**: `DELETE`
+- **URL**: `/schedules/{id}`
+
+### 🔹 Path Variable
+| 이름 | 타입 | 필수 | 설명    |
+|----|----|----|-------|
+| id | Long | O | 일정 ID |
+
+### 🔹 Request Example
+```json
+{
+  "password":"password123"
+}
+```
+
+### 🔹 Response Example (204 No Content)
+```json
+
+```
+
+---
+
+## 6️⃣ 댓글 생성 API
+
+### 🔹 API 정보
+- **API 명**: 댓글 생성
+- **Method**: `POST`
+- **URL**: `/schedules/{scheduleId}/comments`
+
+### 🔹 Path Variable
+| 이름 | 타입 | 필수 | 설명    |
+|----|----|----|-------|
+| scheduleId | Long | O | 일정 ID |
+
+### 🔹 Request Example
+```json
+{
+  "content":"댓글1",
+  "name":"김모씨",
+  "password":"1111"
+}
+```
+
+### 🔹 Response Example (201 Created)
+```json
+{
+  "id": 1,
+  "content": "댓글1",
+  "name": "김모씨",
+  "createdAt": "2026-01-31T14:46:09.3843582",
+  "modifiedAt": "2026-01-31T14:46:09.3843582"
+}
+```
+
+---
+
 ## 🧪 테스트 및 문서화 도구
 
 - **Postman**: API 테스트 및 문서 자동화
@@ -138,19 +246,34 @@ Content-Type: application/json
 
 ---
 
-## 📎 참고 사항
-- 모든 날짜/시간 데이터는 `ISO-8601` 형식을 사용합니다.
-- Enum 값은 대문자 문자열로 반환합니다.
-- 에러 응답은 공통 포맷을 유지합니다.
+## 📎 데이터베이스 설정 및 참고 사항
 
-```json
-{
-  "code": "ERROR_CODE",
-  "message": "에러 메시지"
-}
-```
+### 🗄️ Database 정보
+- DBMS: MySQL
+- Database Name: schedule
+- Username: root
+- Password: 12345678
+
+<br>
+
+### 🛢️ 테이블 구성
+
+| 테이블명      | 설명    |
+|-----------|-------|
+| schedules | 일정 정보를 저장하는 테이블 |
+| comments  | 일정에 종속된 댓글 정보를 저장하는 테이블 |
+
+<br>
+
+### 📋 ERD
+
+<img src="./ScheduleProject_ERD.png" width="900" height="600"/>
 
 ---
-# 📘 ERD
 
-![poster](./ScheduleProject_ERD.png)
+## 🧪 테스트 및 작성 도구
+
+- **ERD Cloud**: ERD 무료 생성 Tool
+  - https://www.erdcloud.com/
+
+---
