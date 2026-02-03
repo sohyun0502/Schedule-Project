@@ -1,6 +1,5 @@
 package kr.spartaclub.scheduleproject.controller;
 
-import jakarta.validation.Valid;
 import kr.spartaclub.scheduleproject.dto.*;
 import kr.spartaclub.scheduleproject.service.ScheduleService;
 import lombok.RequiredArgsConstructor;

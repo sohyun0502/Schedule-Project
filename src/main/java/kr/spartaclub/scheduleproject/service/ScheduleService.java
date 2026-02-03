@@ -31,6 +31,8 @@ public class ScheduleService {
                 request.getName(),
                 request.getPassword()
         );
+
+        // 저장
         Schedule savedSchedule = scheduleRepository.save(schedule);
         return new CreateScheduleResponse(
                 savedSchedule.getId(),
@@ -42,6 +44,7 @@ public class ScheduleService {
         );
     }
 
+    // 일정 생성시 유효성 체크
     private void validateCreateSchedule(CreateScheduleRequest request) {
         // 제목
         if (request.getTitle() == null || request.getTitle().isBlank()) {
@@ -104,9 +107,13 @@ public class ScheduleService {
     @Transactional(readOnly = true)
     public List<GetAllScheduleResponse> findAllSchedules(String name) {
         List<Schedule> schedules;
+
+        // 작성자명이 조건에 있을때와 없을때 분기
         if (name == null) {
+            // 수정일 기준 내림차순
             schedules = scheduleRepository.findAllByOrderByModifiedAtDesc();
         } else {
+            // 작성자명을 조회 조건으로 찾고 수정일 기준 내림차순
             schedules = scheduleRepository.findByNameOrderByModifiedAtDesc(name);
         }
 
@@ -135,6 +142,7 @@ public class ScheduleService {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
+        // 제목과 작성자명 수정
         schedule.update(request.getTitle(), request.getName());
         return new UpdateScheduleResponse(
                 schedule.getId(),
@@ -158,6 +166,7 @@ public class ScheduleService {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
+        // 삭제
         scheduleRepository.deleteById(id);
     }
 
@@ -187,6 +196,8 @@ public class ScheduleService {
                 request.getName(),
                 request.getPassword()
         );
+
+        // 저장
         Comment savedComment = commentRepository.save(comment);
         return new CreateCommentResponse(
                 savedComment.getId(),
@@ -197,19 +208,22 @@ public class ScheduleService {
         );
     }
 
+    // 댓글 생성시 유효성 체크
     private void validateCreateComment(CreateCommentRequest request) {
+        // 내용
         if (request.getContent() == null || request.getContent().isBlank()) {
             throw new IllegalArgumentException("댓글 내용은 필수입니다.");
         }
-
         if (request.getContent().length() > 100) {
             throw new IllegalArgumentException("댓글 내용은 100자 이내여야 합니다.");
         }
 
+        // 작성자명
         if (request.getName() == null || request.getName().isBlank()) {
             throw new IllegalArgumentException("작성자명은 필수입니다.");
         }
 
+        // 비밀번호
         if (request.getPassword() == null || request.getPassword().isBlank()) {
             throw new IllegalArgumentException("비밀번호는 필수입니다.");
         }
