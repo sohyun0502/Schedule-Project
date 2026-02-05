@@ -23,6 +23,7 @@ public class Comment extends BaseEntity {
     private Schedule schedule;
 
     // private Long scheduleId; -> 외래키 생성 안하고 이런식으로 연관관계 없이 개발 가능!
+    // 만약 Schedule과 Comment 테이블이 물리적으로 분리되어 있으면 연관관계 맺기 불가능
 
     public Comment(Schedule schedule, String content, String name, String password) {
         this.schedule = schedule;
