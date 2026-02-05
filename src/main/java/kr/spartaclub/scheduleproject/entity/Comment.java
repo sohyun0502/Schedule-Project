@@ -22,6 +22,8 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 
+    // private Long scheduleId; -> 외래키 생성 안하고 이런식으로 연관관계 없이 개발 가능!
+
     public Comment(Schedule schedule, String content, String name, String password) {
         this.schedule = schedule;
         this.content = content;

@@ -8,6 +8,7 @@ import kr.spartaclub.scheduleproject.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 
@@ -131,6 +132,7 @@ public class ScheduleService {
     }
 
     // 일정 수정
+    // 수정 시 validation 체크 필요
     @Transactional
     public UpdateScheduleResponse updateSchedule(Long id, UpdateScheduleRequest request) {
         Schedule schedule = scheduleRepository.findById(id).orElseThrow(
@@ -138,9 +140,17 @@ public class ScheduleService {
         );
 
         // 비밀번호 검증
-        if (!schedule.getPassword().equals(request.getPassword())) {
+        /*if (!schedule.getPassword().equals(request.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }*/
+
+        // schedule.getPassword()가 NULL일 수 있기 때문에 nullSafeEquals 사용
+        if (!ObjectUtils.nullSafeEquals(schedule.getPassword(), request.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
+
+        // 유효성 체크
+        validateUpdateSchedule(request);
 
         // 제목과 작성자명 수정
         schedule.update(request.getTitle(), request.getName());
@@ -154,6 +164,22 @@ public class ScheduleService {
         );
     }
 
+    // 일정 수정시 유효성 체크
+    private void validateUpdateSchedule(UpdateScheduleRequest request) {
+        // 제목
+        if (request.getTitle() == null || request.getTitle().isBlank()) {
+            throw new IllegalArgumentException("일정 제목은 필수입니다.");
+        }
+        if (request.getTitle().length() > 30) {
+            throw new IllegalArgumentException("일정 제목은 30자 이내여야 합니다.");
+        }
+
+        // 작성자명
+        if (request.getName() == null || request.getName().isBlank()) {
+            throw new IllegalArgumentException("작성자명은 필수입니다.");
+        }
+    }
+
     // 일정 삭제
     @Transactional
     public void deleteSchedule(Long id, DeleteScheduleRequest request) {
@@ -162,7 +188,12 @@ public class ScheduleService {
         );
 
         // 비밀번호 검증
-        if (!schedule.getPassword().equals(request.getPassword())) {
+        /*if (!schedule.getPassword().equals(request.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }*/
+
+        // schedule.getPassword()가 NULL일 수 있기 때문에 nullSafeEquals 사용
+        if (!ObjectUtils.nullSafeEquals(schedule.getPassword(), request.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
