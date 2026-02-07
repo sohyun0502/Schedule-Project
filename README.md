@@ -267,7 +267,7 @@ Content-Type: application/json
 
 ### 📋 ERD
 
-<img src="./ScheduleProject_ERD.png" width="900" height="600"/>
+<img src="./Schedule-Project.png" width="900" height="600"/>
 
 ---
 

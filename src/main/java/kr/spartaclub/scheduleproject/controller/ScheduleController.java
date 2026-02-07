@@ -23,14 +23,14 @@ public class ScheduleController {
 
     // 일정 조회 - 선택 일정 조회
     @GetMapping("/schedules/{id}")
-    public ResponseEntity<GetOneScheduleResponse> getOneSchedule(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.findOneSchedule(id));
+    public ResponseEntity<GetOneScheduleResponse> getSchedule(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.getSchedule(id));
     }
 
     // 일정 조회 - 전체 일정 조회
     @GetMapping("/schedules")
-    public ResponseEntity<List<GetAllScheduleResponse>> getAllSchedules(@RequestParam(required = false) String name) {
-        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.findAllSchedules(name));
+    public ResponseEntity<List<GetAllScheduleResponse>> getSchedules(@RequestParam(required = false) String name) {
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.getSchedules(name));
     }
 
     // 일정 수정

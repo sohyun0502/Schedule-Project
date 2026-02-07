@@ -76,7 +76,7 @@ public class ScheduleService {
 
     // 일정 조회 - 선택 일정 조회
     @Transactional(readOnly = true)
-    public GetOneScheduleResponse findOneSchedule(Long id) {
+    public GetOneScheduleResponse getSchedule(Long id) {
         Schedule schedule = scheduleRepository.findById(id).orElseThrow(
                 () -> new IllegalStateException("없는 일정입니다.")
         );
@@ -106,7 +106,7 @@ public class ScheduleService {
 
     // 일정 조회 - 전체 일정 조회
     @Transactional(readOnly = true)
-    public List<GetAllScheduleResponse> findAllSchedules(String name) {
+    public List<GetAllScheduleResponse> getSchedules(String name) {
         List<Schedule> schedules;
 
         // 작성자명이 조건에 있을때와 없을때 분기
