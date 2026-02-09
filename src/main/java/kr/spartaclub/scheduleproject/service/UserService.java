@@ -89,8 +89,8 @@ public class UserService {
 
     @Transactional
     public UpdateUserResponse updateUser(Long id, UpdateUserRequest request) {
-        // 이메일 중복 체크
-        if (userRepository.existsByEmail(request.getEmail())) {
+        // 본인 제외 이메일 중복 체크
+        if (userRepository.existsByEmailAndIdNot(request.getEmail(), id)) {
             throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
         }
 
