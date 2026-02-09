@@ -14,21 +14,21 @@ public class Comment extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String content;
-    private String name;
-    private String password;
 
-    // 외래키 생성 = FOREIGN KEY (schedule_id) REFERENCES schedule(id)
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "schedule_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "schedule_id", nullable = false)
     private Schedule schedule;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     // private Long scheduleId; -> 외래키 생성 안하고 이런식으로 연관관계 없이 개발 가능!
     // 만약 Schedule과 Comment 테이블이 물리적으로 분리되어 있으면 연관관계 맺기 불가능
 
-    public Comment(Schedule schedule, String content, String name, String password) {
+    public Comment(Schedule schedule, String content, User user) {
         this.schedule = schedule;
         this.content = content;
-        this.name = name;
-        this.password = password;
+        this.user = user;
     }
 }

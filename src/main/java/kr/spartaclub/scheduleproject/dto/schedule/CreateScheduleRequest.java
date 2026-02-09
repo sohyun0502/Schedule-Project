@@ -1,4 +1,4 @@
-package kr.spartaclub.scheduleproject.dto;
+package kr.spartaclub.scheduleproject.dto.schedule;
 
 import lombok.Getter;
 
@@ -7,6 +7,4 @@ public class CreateScheduleRequest {
 
     private String title;
     private String content;
-    private String name;
-    private String password;
 }

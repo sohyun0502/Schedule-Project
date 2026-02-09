@@ -1,6 +1,6 @@
 package kr.spartaclub.scheduleproject.controller;
 
-import kr.spartaclub.scheduleproject.dto.*;
+import kr.spartaclub.scheduleproject.dto.schedule.*;
 import kr.spartaclub.scheduleproject.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,40 +17,45 @@ public class ScheduleController {
 
     // 일정 생성
     @PostMapping("/schedules")
-    public ResponseEntity<CreateScheduleResponse> createSchedule(@RequestBody CreateScheduleRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(scheduleService.saveSchedule(request));
+    public ResponseEntity<CreateScheduleResponse> createSchedule(
+            @RequestAttribute Long userId,
+            @RequestBody CreateScheduleRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(scheduleService.saveSchedule(userId, request));
     }
 
     // 일정 조회 - 선택 일정 조회
     @GetMapping("/schedules/{id}")
-    public ResponseEntity<GetOneScheduleResponse> getSchedule(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.getSchedule(id));
+    public ResponseEntity<GetOneScheduleResponse> getSchedule(
+            @RequestAttribute Long userId,
+            @PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.getSchedule(userId, id));
     }
 
     // 일정 조회 - 전체 일정 조회
     @GetMapping("/schedules")
-    public ResponseEntity<List<GetAllScheduleResponse>> getSchedules(@RequestParam(required = false) String name) {
-        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.getSchedules(name));
+    public ResponseEntity<List<GetAllScheduleResponse>> getSchedules(
+            @RequestAttribute Long userId,
+            @RequestParam(required = false) String name) {
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.getSchedules(userId, name));
     }
 
     // 일정 수정
     @PutMapping("/schedules/{id}")
-    public ResponseEntity<UpdateScheduleResponse> updateSchedule(@PathVariable Long id, @RequestBody UpdateScheduleRequest request) {
-        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.updateSchedule(id, request));
+    public ResponseEntity<UpdateScheduleResponse> updateSchedule(
+            @RequestAttribute Long userId,
+            @PathVariable Long id,
+            @RequestBody UpdateScheduleRequest request) {
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.updateSchedule(userId, id, request));
     }
 
     // 일정 삭제
     // 원래 @DeleteMapping은 Body가 없음. 하지만 요즘 최신 버전의 HTTP는 Body가 있어서 @RequestBody 사용가능
     // 이전에는 @DeleteMapping 대신 @PostMapping을 써서 @RequestBody 사용
     @DeleteMapping("/schedules/{id}")
-    public ResponseEntity<Void> deleteSchedule(@PathVariable Long id, @RequestBody DeleteScheduleRequest request) {
-        scheduleService.deleteSchedule(id, request);
+    public ResponseEntity<Void> deleteSchedule(
+            @RequestAttribute Long userId,
+            @PathVariable Long id) {
+        scheduleService.deleteSchedule(userId, id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
-
-    // 댓글 생성
-    @PostMapping("/schedules/{scheduleId}/comments")
-    public ResponseEntity<CreateCommentResponse> createComment(@PathVariable Long scheduleId, @RequestBody CreateCommentRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(scheduleService.saveComment(scheduleId, request));
     }
 }

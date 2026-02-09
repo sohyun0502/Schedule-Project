@@ -1,4 +1,4 @@
-package kr.spartaclub.scheduleproject.dto;
+package kr.spartaclub.scheduleproject.dto.comment;
 
 import lombok.Getter;
 
@@ -7,5 +7,4 @@ public class CreateCommentRequest {
 
     private String content;
     private String name;
-    private String password;
 }
