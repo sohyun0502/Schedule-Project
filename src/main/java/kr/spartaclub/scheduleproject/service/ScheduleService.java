@@ -149,7 +149,7 @@ public class ScheduleService {
         }
 
         // 제목만 수정
-        schedule.update(request.getTitle());
+        schedule.update(request.getTitle(), request.getContent());
         return new UpdateScheduleResponse(
                 schedule.getId(),
                 schedule.getTitle(),
