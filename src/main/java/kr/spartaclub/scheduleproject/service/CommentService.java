@@ -24,9 +24,6 @@ public class CommentService {
     @Transactional
     public CreateCommentResponse saveComment(Long userId, Long scheduleId, CreateCommentRequest request) {
 
-        // 유효성 체크
-        // validateCreateComment(request);
-
         // 해당 일정 조회
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
                 () -> new IllegalStateException("없는 일정입니다.")
@@ -62,24 +59,4 @@ public class CommentService {
         );
     }
 
-    // 댓글 생성시 유효성 체크
-    /*private void validateCreateComment(CreateCommentRequest request) {
-        // 내용
-        if (request.getContent() == null || request.getContent().isBlank()) {
-            throw new IllegalArgumentException("댓글 내용은 필수입니다.");
-        }
-        if (request.getContent().length() > 100) {
-            throw new IllegalArgumentException("댓글 내용은 100자 이내여야 합니다.");
-        }
-
-        // 작성자명
-        if (request.getName() == null || request.getName().isBlank()) {
-            throw new IllegalArgumentException("작성자명은 필수입니다.");
-        }
-
-        // 비밀번호
-        if (request.getPassword() == null || request.getPassword().isBlank()) {
-            throw new IllegalArgumentException("비밀번호는 필수입니다.");
-        }
-    }*/
 }

@@ -1,5 +1,6 @@
 package kr.spartaclub.scheduleproject.controller;
 
+import jakarta.validation.Valid;
 import kr.spartaclub.scheduleproject.dto.schedule.*;
 import kr.spartaclub.scheduleproject.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class ScheduleController {
     @PostMapping("/schedules")
     public ResponseEntity<CreateScheduleResponse> createSchedule(
             @RequestAttribute Long userId,
-            @RequestBody CreateScheduleRequest request) {
+            @Valid @RequestBody CreateScheduleRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(scheduleService.saveSchedule(userId, request));
     }
 
@@ -34,9 +35,8 @@ public class ScheduleController {
     // 일정 조회 - 전체 일정 조회
     @GetMapping("/schedules")
     public ResponseEntity<List<GetAllScheduleResponse>> getSchedules(
-            @RequestAttribute Long userId,
-            @RequestParam(required = false) String name) {
-        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.getSchedules(userId, name));
+            @RequestAttribute Long userId) {
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.getSchedules(userId));
     }
 
     // 일정 수정
@@ -44,7 +44,7 @@ public class ScheduleController {
     public ResponseEntity<UpdateScheduleResponse> updateSchedule(
             @RequestAttribute Long userId,
             @PathVariable Long id,
-            @RequestBody UpdateScheduleRequest request) {
+            @Valid @RequestBody UpdateScheduleRequest request) {
         return ResponseEntity.status(HttpStatus.OK).body(scheduleService.updateSchedule(userId, id, request));
     }
 

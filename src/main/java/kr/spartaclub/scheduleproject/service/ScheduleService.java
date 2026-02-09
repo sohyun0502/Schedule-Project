@@ -25,10 +25,6 @@ public class ScheduleService {
     // 일정 생성
     @Transactional
     public CreateScheduleResponse saveSchedule(Long userId, CreateScheduleRequest request) {
-
-        // 유효성 체크
-        // validateCreateSchedule(request);
-
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new IllegalStateException("없는 유저입니다.")
         );
@@ -50,35 +46,6 @@ public class ScheduleService {
                 savedSchedule.getModifiedAt()
         );
     }
-
-    // 일정 생성시 유효성 체크
-    /*private void validateCreateSchedule(CreateScheduleRequest request) {
-        // 제목
-        if (request.getTitle() == null || request.getTitle().isBlank()) {
-            throw new IllegalArgumentException("일정 제목은 필수입니다.");
-        }
-        if (request.getTitle().length() > 30) {
-            throw new IllegalArgumentException("일정 제목은 30자 이내여야 합니다.");
-        }
-
-        // 내용
-        if (request.getContent() == null || request.getContent().isBlank()) {
-            throw new IllegalArgumentException("일정 내용은 필수입니다.");
-        }
-        if (request.getContent().length() > 200) {
-            throw new IllegalArgumentException("일정 내용은 200자 이내여야 합니다.");
-        }
-
-        // 작성자명
-        if (request.getName() == null || request.getName().isBlank()) {
-            throw new IllegalArgumentException("작성자명은 필수입니다.");
-        }
-
-        // 비밀번호
-        if (request.getPassword() == null || request.getPassword().isBlank()) {
-            throw new IllegalArgumentException("비밀번호는 필수입니다.");
-        }
-    }*/
 
     // 일정 조회 - 유저별 일정 단건 조회
     @Transactional(readOnly = true)
@@ -116,7 +83,7 @@ public class ScheduleService {
 
     // 일정 조회 - 유저별 일정 전체 조회
     @Transactional(readOnly = true)
-    public List<GetAllScheduleResponse> getSchedules(Long userId, String name) {
+    public List<GetAllScheduleResponse> getSchedules(Long userId) {
         List<Schedule> schedules = scheduleRepository.findAllByOrderByModifiedAtDesc(userId);
 
         return schedules.stream().map(
@@ -140,9 +107,6 @@ public class ScheduleService {
                 () -> new IllegalStateException("없는 일정입니다.")
         );
 
-        // 유효성 체크
-        // validateUpdateSchedule(request);
-
         // 작성자와 로그인 유저가 같은지 비교
         if (!schedule.getUser().getId().equals(userId)) {
             throw new IllegalArgumentException("작성자와 로그인 유저가 다릅니다.");
@@ -159,22 +123,6 @@ public class ScheduleService {
                 schedule.getModifiedAt()
         );
     }
-
-    // 일정 수정시 유효성 체크
-    /*private void validateUpdateSchedule(UpdateScheduleRequest request) {
-        // 제목
-        if (request.getTitle() == null || request.getTitle().isBlank()) {
-            throw new IllegalArgumentException("일정 제목은 필수입니다.");
-        }
-        if (request.getTitle().length() > 30) {
-            throw new IllegalArgumentException("일정 제목은 30자 이내여야 합니다.");
-        }
-
-        // 작성자명
-        if (request.getName() == null || request.getName().isBlank()) {
-            throw new IllegalArgumentException("작성자명은 필수입니다.");
-        }
-    }*/
 
     // 일정 삭제
     @Transactional

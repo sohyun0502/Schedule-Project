@@ -1,5 +1,6 @@
 package kr.spartaclub.scheduleproject.controller;
 
+import jakarta.validation.Valid;
 import kr.spartaclub.scheduleproject.dto.comment.CreateCommentRequest;
 import kr.spartaclub.scheduleproject.dto.comment.CreateCommentResponse;
 import kr.spartaclub.scheduleproject.service.CommentService;
@@ -19,7 +20,7 @@ public class CommentController {
     public ResponseEntity<CreateCommentResponse> createComment(
             @RequestAttribute Long userId,
             @PathVariable Long scheduleId,
-            @RequestBody CreateCommentRequest request) {
+            @Valid @RequestBody CreateCommentRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(commentService.saveComment(userId, scheduleId, request));
     }
 }
