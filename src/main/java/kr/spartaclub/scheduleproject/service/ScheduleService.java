@@ -9,7 +9,6 @@ import kr.spartaclub.scheduleproject.repository.CommentRepository;
 import kr.spartaclub.scheduleproject.repository.ScheduleRepository;
 import kr.spartaclub.scheduleproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -89,7 +88,7 @@ public class ScheduleService {
         );
 
         if (!schedule.getUser().getId().equals(userId)) {
-            throw new AccessDeniedException("작성자와 로그인 유저가 다릅니다.");
+            throw new IllegalArgumentException("작성자와 로그인 유저가 다릅니다.");
         }
 
         // 선택한 일정의 댓글 리스트 조회
@@ -146,7 +145,7 @@ public class ScheduleService {
 
         // 작성자와 로그인 유저가 같은지 비교
         if (!schedule.getUser().getId().equals(userId)) {
-            throw new AccessDeniedException("작성자와 로그인 유저가 다릅니다.");
+            throw new IllegalArgumentException("작성자와 로그인 유저가 다릅니다.");
         }
 
         // 제목만 수정
@@ -186,7 +185,7 @@ public class ScheduleService {
 
         // 작성자와 로그인 유저가 같은지 비교
         if (!schedule.getUser().getId().equals(userId)) {
-            throw new AccessDeniedException("작성자와 로그인 유저가 다릅니다.");
+            throw new IllegalArgumentException("작성자와 로그인 유저가 다릅니다.");
         }
 
         // 삭제

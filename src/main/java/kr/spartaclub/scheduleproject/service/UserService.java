@@ -28,7 +28,9 @@ public class UserService {
         return new SignupResponse(
                 savedUser.getId(),
                 savedUser.getName(),
-                savedUser.getEmail()
+                savedUser.getEmail(),
+                savedUser.getCreatedAt(),
+                savedUser.getModifiedAt()
         );
     }
 
@@ -56,7 +58,9 @@ public class UserService {
         return new GetUserResponse(
                 user.getId(),
                 user.getName(),
-                user.getEmail()
+                user.getEmail(),
+                user.getCreatedAt(),
+                user.getModifiedAt()
         );
     }
 
@@ -67,7 +71,9 @@ public class UserService {
                 user -> new GetUserResponse(
                         user.getId(),
                         user.getName(),
-                        user.getEmail()
+                        user.getEmail(),
+                        user.getCreatedAt(),
+                        user.getModifiedAt()
                 )
         ).toList();
     }
@@ -81,7 +87,9 @@ public class UserService {
         return new UpdateUserResponse(
                 user.getId(),
                 user.getName(),
-                user.getEmail()
+                user.getEmail(),
+                user.getCreatedAt(),
+                user.getModifiedAt()
         );
     }
 

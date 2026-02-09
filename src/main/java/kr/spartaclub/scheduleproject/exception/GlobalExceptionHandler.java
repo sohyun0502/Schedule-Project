@@ -2,7 +2,6 @@ package kr.spartaclub.scheduleproject.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -34,18 +33,6 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
-                .body(Map.of("message", e.getMessage()));
-    }
-
-    /**
-     * 본인 권한이 아닌 경우
-     */
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<Map<String, String>> handleAccessDenied(
-            AccessDeniedException e) {
-
-        return ResponseEntity
-                .status(HttpStatus.FORBIDDEN)
                 .body(Map.of("message", e.getMessage()));
     }
 

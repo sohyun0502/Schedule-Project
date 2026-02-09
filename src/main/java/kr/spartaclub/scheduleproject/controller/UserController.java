@@ -19,7 +19,7 @@ public class UserController {
 
     // 유저 저장 (회원가입)
     @PostMapping("/signup")
-    public ResponseEntity<SignupResponse> signup(@RequestBody SignupRequest request) {
+    public ResponseEntity<SignupResponse> signup(@Valid @RequestBody SignupRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.signup(request));
     }
 
@@ -50,7 +50,7 @@ public class UserController {
     @PutMapping("/users/me")
     public ResponseEntity<UpdateUserResponse> updateUser(
             @RequestAttribute Long userId,
-            @RequestBody UpdateUserRequest request) {
+            @Valid @RequestBody UpdateUserRequest request) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.updateUser(userId, request));
     }
 
