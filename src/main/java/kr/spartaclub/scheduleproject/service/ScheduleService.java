@@ -161,11 +161,4 @@ public class ScheduleService {
                 )
         );
     }
-
-    @Transactional(readOnly = true)
-    public Schedule getScheduleByIdOrThrow(Long scheduleId) {
-        return scheduleRepository.findById(scheduleId).orElseThrow(
-                () -> new IllegalStateException("없는 일정입니다.")
-        );
-    }
 }

@@ -21,14 +21,14 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final UserService userService;
-    private final ScheduleService scheduleService;
+    private final ScheduleQueryService scheduleQueryService;
 
     // 댓글 생성
     @Transactional
     public CreateCommentResponse saveComment(Long userId, Long scheduleId, CreateCommentRequest request) {
 
         // 해당 일정 조회
-        Schedule schedule = scheduleService.getScheduleByIdOrThrow(scheduleId);
+        Schedule schedule = scheduleQueryService.getScheduleByIdOrThrow(scheduleId);
 
         // 해당 유저 조회
         User user = userService.getUserByIdOrThrow(userId);
