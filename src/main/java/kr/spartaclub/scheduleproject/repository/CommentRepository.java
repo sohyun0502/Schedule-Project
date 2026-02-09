@@ -16,5 +16,5 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findByScheduleId(Long scheduleId);
 
     // 유저별 전체 조회 (수정일 내림차순)
-    List<Comment> findAllByUserIdOrderByModifiedAtDesc(@Param("userId") Long userId);
+    List<Comment> findAllByUserIdOrderByModifiedAtDesc(Long userId);
 }

@@ -9,6 +9,12 @@ import kr.spartaclub.scheduleproject.repository.CommentRepository;
 import kr.spartaclub.scheduleproject.repository.ScheduleRepository;
 import kr.spartaclub.scheduleproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -138,5 +144,23 @@ public class ScheduleService {
 
         // 삭제
         scheduleRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<GetPageableScheduleResponse> getPageableSchedules(Long userId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("modifiedAt").descending());
+        Page<Schedule> schedules = scheduleRepository.findAllByUserId(userId, pageable);
+
+        return schedules.map(
+                schedule -> new GetPageableScheduleResponse(
+                        schedule.getId(),
+                        schedule.getTitle(),
+                        schedule.getContent(),
+                        commentRepository.countByScheduleId(schedule.getId()),
+                        schedule.getUser().getName(),
+                        schedule.getCreatedAt(),
+                        schedule.getModifiedAt()
+                )
+        );
     }
 }
