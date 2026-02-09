@@ -25,15 +25,13 @@ import java.util.List;
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
-    private final CommentRepository commentRepository;
-    private final UserRepository userRepository;
+    private final CommentService commentService;
+    private final UserService userService;
 
     // 일정 생성
     @Transactional
     public CreateScheduleResponse saveSchedule(Long userId, CreateScheduleRequest request) {
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalStateException("없는 유저입니다.")
-        );
+        User user = userService.getUserByIdOrThrow(userId);
 
         Schedule schedule = new Schedule(
                 user,
@@ -65,7 +63,7 @@ public class ScheduleService {
         }
 
         // 선택한 일정의 댓글 리스트 조회
-        List<Comment> commentList = commentRepository.findByScheduleId(id);
+        List<Comment> commentList = commentService.getCommentList(id);
         List<GetCommentResponse> comments = commentList.stream().map(
                 comment -> new GetCommentResponse(
                         comment.getId(),
@@ -156,11 +154,18 @@ public class ScheduleService {
                         schedule.getId(),
                         schedule.getTitle(),
                         schedule.getContent(),
-                        commentRepository.countByScheduleId(schedule.getId()),
+                        commentService.countComment(schedule.getId()),
                         schedule.getUser().getName(),
                         schedule.getCreatedAt(),
                         schedule.getModifiedAt()
                 )
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public Schedule getScheduleByIdOrThrow(Long scheduleId) {
+        return scheduleRepository.findById(scheduleId).orElseThrow(
+                () -> new IllegalStateException("없는 일정입니다.")
         );
     }
 }

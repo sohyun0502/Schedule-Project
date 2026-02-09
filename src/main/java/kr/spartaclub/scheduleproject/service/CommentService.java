@@ -20,22 +20,18 @@ import java.util.List;
 public class CommentService {
 
     private final CommentRepository commentRepository;
-    private final ScheduleRepository scheduleRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
+    private final ScheduleService scheduleService;
 
     // 댓글 생성
     @Transactional
     public CreateCommentResponse saveComment(Long userId, Long scheduleId, CreateCommentRequest request) {
 
         // 해당 일정 조회
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
-                () -> new IllegalStateException("없는 일정입니다.")
-        );
+        Schedule schedule = scheduleService.getScheduleByIdOrThrow(scheduleId);
 
         // 해당 유저 조회
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalStateException("없는 유저입니다.")
-        );
+        User user = userService.getUserByIdOrThrow(userId);
 
         // 한 일정 당 댓글 개수 count
         int commentCount = commentRepository.countByScheduleId(scheduleId);
@@ -74,5 +70,15 @@ public class CommentService {
                         comment.getModifiedAt()
                 )
         ).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Comment> getCommentList(Long id) {
+        return commentRepository.findByScheduleId(id);
+    }
+
+    @Transactional(readOnly = true)
+    public int countComment(Long scheduleId) {
+        return commentRepository.countByScheduleId(scheduleId);
     }
 }

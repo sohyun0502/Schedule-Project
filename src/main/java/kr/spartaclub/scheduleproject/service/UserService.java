@@ -119,4 +119,12 @@ public class UserService {
         }
         userRepository.deleteById(id);
     }
+
+    @Transactional(readOnly = true)
+    public User getUserByIdOrThrow(Long userId) {
+        return userRepository.findById(userId).orElseThrow(
+                () -> new IllegalStateException("없는 유저입니다.")
+        );
+    }
+
 }
