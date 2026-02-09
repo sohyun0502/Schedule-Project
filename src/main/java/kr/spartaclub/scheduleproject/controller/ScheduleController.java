@@ -61,7 +61,7 @@ public class ScheduleController {
     }
 
     // 일정 페이징 조회
-    @GetMapping("/schedules")
+    @GetMapping("/schedules/paging")
     public ResponseEntity<Page<GetPageableScheduleResponse>> getPageableSchedules(
             @RequestAttribute Long userId,
             @RequestParam(defaultValue = "0") int page,
