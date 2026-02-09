@@ -2,6 +2,7 @@ package kr.spartaclub.scheduleproject.service;
 
 import kr.spartaclub.scheduleproject.dto.comment.CreateCommentRequest;
 import kr.spartaclub.scheduleproject.dto.comment.CreateCommentResponse;
+import kr.spartaclub.scheduleproject.dto.comment.GetCommentResponse;
 import kr.spartaclub.scheduleproject.entity.Comment;
 import kr.spartaclub.scheduleproject.entity.Schedule;
 import kr.spartaclub.scheduleproject.entity.User;
@@ -11,6 +12,8 @@ import kr.spartaclub.scheduleproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -59,4 +62,17 @@ public class CommentService {
         );
     }
 
+    @Transactional(readOnly = true)
+    public List<GetCommentResponse> getComments(Long userId) {
+        List<Comment> comments = commentRepository.findAllByUserIdOrderByModifiedAtDesc(userId);
+        return comments.stream().map(
+                comment -> new GetCommentResponse(
+                        comment.getId(),
+                        comment.getContent(),
+                        comment.getUser().getName(),
+                        comment.getCreatedAt(),
+                        comment.getModifiedAt()
+                )
+        ).toList();
+    }
 }

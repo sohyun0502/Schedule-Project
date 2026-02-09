@@ -84,7 +84,7 @@ public class ScheduleService {
     // 일정 조회 - 유저별 일정 전체 조회
     @Transactional(readOnly = true)
     public List<GetAllScheduleResponse> getSchedules(Long userId) {
-        List<Schedule> schedules = scheduleRepository.findAllByOrderByModifiedAtDesc(userId);
+        List<Schedule> schedules = scheduleRepository.findAllByUserIdOrderByModifiedAtDesc(userId);
 
         return schedules.stream().map(
                 schedule -> new GetAllScheduleResponse(
