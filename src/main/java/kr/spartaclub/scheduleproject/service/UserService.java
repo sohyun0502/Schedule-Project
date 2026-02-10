@@ -22,6 +22,7 @@ public class UserService {
     private final CommentService commentService;
     private final PasswordEncoder passwordEncoder;
 
+    // 회원가입
     @Transactional
     public SignupResponse signup(SignupRequest request) {
         // 이메일 중복 체크
@@ -47,6 +48,7 @@ public class UserService {
         );
     }
 
+    // 로그인
     @Transactional(readOnly = true)
     public SessionUser login(@Valid LoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(
@@ -63,6 +65,7 @@ public class UserService {
         );
     }
 
+    // 유저 단건 조회
     @Transactional(readOnly = true)
     public GetUserResponse getUser(Long id) {
         User user = userRepository.findById(id).orElseThrow(
@@ -77,6 +80,7 @@ public class UserService {
         );
     }
 
+    // 유저 전체 조회
     @Transactional(readOnly = true)
     public List<GetUserResponse> getUsers() {
         List<User> users = userRepository.findAll();
@@ -91,6 +95,7 @@ public class UserService {
         ).toList();
     }
 
+    // 유저 수정
     @Transactional
     public UpdateUserResponse updateUser(Long id, UpdateUserRequest request) {
         // 본인 제외 이메일 중복 체크
@@ -115,6 +120,7 @@ public class UserService {
         );
     }
 
+    // 유저 삭제
     @Transactional
     public void deleteUser(Long id) {
         boolean existence = userRepository.existsById(id);
@@ -123,6 +129,7 @@ public class UserService {
         }
         // 유저 삭제시 해당 user_id의 일정과 댓글 모두 삭제
         commentService.deleteCommentByUserId(id);
+        // 본인 일정 삭제시 하위의 댓글들도 모두 삭제
         scheduleService.deleteScheduleById(id);
         userRepository.deleteById(id);
     }

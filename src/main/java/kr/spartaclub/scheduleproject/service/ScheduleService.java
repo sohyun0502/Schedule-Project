@@ -99,7 +99,6 @@ public class ScheduleService {
     }
 
     // 일정 수정
-    // 수정 시 validation 체크 필요
     @Transactional
     public UpdateScheduleResponse updateSchedule(Long userId, Long id, UpdateScheduleRequest request) {
         Schedule schedule = scheduleRepository.findById(id).orElseThrow(
@@ -111,7 +110,6 @@ public class ScheduleService {
             throw new IllegalArgumentException("작성자와 로그인 유저가 다릅니다.");
         }
 
-        // 제목만 수정
         schedule.update(request.getTitle(), request.getContent());
         return new UpdateScheduleResponse(
                 schedule.getId(),
@@ -135,7 +133,7 @@ public class ScheduleService {
             throw new IllegalArgumentException("작성자와 로그인 유저가 다릅니다.");
         }
 
-        // 삭제
+        // 삭제시 해당 일정 하위의 댓글들도 모두 삭제
         commentService.deleteCommentByScheduleId(id);
         scheduleRepository.deleteById(id);
     }

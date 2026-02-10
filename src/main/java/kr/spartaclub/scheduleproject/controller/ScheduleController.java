@@ -48,8 +48,6 @@ public class ScheduleController {
     }
 
     // 일정 삭제
-    // 원래 @DeleteMapping은 Body가 없음. 하지만 요즘 최신 버전의 HTTP는 Body가 있어서 @RequestBody 사용가능
-    // 이전에는 @DeleteMapping 대신 @PostMapping을 써서 @RequestBody 사용
     @DeleteMapping("/schedules/{id}")
     public ResponseEntity<Void> deleteSchedule(
             @RequestAttribute Long userId,

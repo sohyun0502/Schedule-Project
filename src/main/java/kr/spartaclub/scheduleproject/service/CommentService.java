@@ -59,6 +59,7 @@ public class CommentService {
         );
     }
 
+    // 유저별 댓글 전체 조회
     @Transactional(readOnly = true)
     public List<GetCommentResponse> getComments(Long userId) {
         List<Comment> comments = commentRepository.findAllByUserIdOrderByModifiedAtDesc(userId);

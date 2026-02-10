@@ -18,8 +18,7 @@ public class WebConfig implements WebMvcConfigurer {
                 )
                 .excludePathPatterns(
                         "/signup",
-                        "/login",
-                        "/logout"
+                        "/login"
                 );
     }
 }
