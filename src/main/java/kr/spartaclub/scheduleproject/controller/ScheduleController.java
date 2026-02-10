@@ -28,16 +28,14 @@ public class ScheduleController {
     // 일정 조회 - 선택 일정 조회
     @GetMapping("/schedules/{id}")
     public ResponseEntity<GetOneScheduleResponse> getSchedule(
-            @RequestAttribute Long userId,
             @PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.getSchedule(userId, id));
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.getSchedule(id));
     }
 
     // 일정 조회 - 전체 일정 조회
     @GetMapping("/schedules")
-    public ResponseEntity<List<GetAllScheduleResponse>> getSchedules(
-            @RequestAttribute Long userId) {
-        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.getSchedules(userId));
+    public ResponseEntity<List<GetAllScheduleResponse>> getSchedules() {
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.getSchedules());
     }
 
     // 일정 수정
@@ -63,9 +61,8 @@ public class ScheduleController {
     // 일정 페이징 조회
     @GetMapping("/schedules/paging")
     public ResponseEntity<Page<GetPageableScheduleResponse>> getPageableSchedules(
-            @RequestAttribute Long userId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.getPageableSchedules(userId, page, size));
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.getPageableSchedules(page, size));
     }
 }

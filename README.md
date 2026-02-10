@@ -31,23 +31,23 @@ Content-Type: application/json
 
 ## 📌 API 목록
 
-| API 이름 | Method | URL     | 설명      |
-|------|------|---------|---------|
-| 회원가입 | POST | /signup | 유저 생성   |
-| 로그인  | POST | /login  | 유저 로그인  |
+| API 이름 | Method | URL     | 설명     |
+|------|------|---------|--------|
+| 회원가입 | POST | /signup | 유저 생성  |
+| 로그인  | POST | /login  | 유저 로그인 |
 | 유저 단건 조회 | GET  | /users/me | 로그인한 유저 정보 조회 |
 | 유저 전체 조회 | GET  | /users  | 모든 유저 조회 |
 | 유저 수정 | PUT  | /users/me | 로그인한 유저 정보 수정 |
 | 유저 삭제 | DELETE  | /users/me | 로그인한 유저 삭제 |
 
-| API 이름    | Method | URL       | 설명          |
-|-----------|-----|-----------|-------------|
-| 일정 생성     | POST | /schedules | 일정 생성       |
-| 선택 일정 조회  | GET | /schedules/{id} | 일정 단건 조회    |
-| 전체 일정 조회  | GET | /schedules | 전체 일정 조회    |
-| 일정 수정     | PUT | /schedules/{id} | 선택한 일정 수정   |
-| 일정 삭제     | DELETE | /schedules/{id} | 선택한 일정 삭제   |
-| 일정 페이징 조회 | GET | /schedules/paging | 유저별 페이징된 전체 일정 조회 |
+| API 이름    | Method | URL       | 설명            |
+|-----------|-----|-----------|---------------|
+| 일정 생성     | POST | /schedules | 일정 생성         |
+| 선택 일정 조회  | GET | /schedules/{id} | 일정 단건 조회      |
+| 전체 일정 조회  | GET | /schedules | 전체 일정 조회      |
+| 일정 수정     | PUT | /schedules/{id} | 선택한 본인 일정 수정  |
+| 일정 삭제     | DELETE | /schedules/{id} | 선택한 본인 일정 삭제  |
+| 일정 페이징 조회 | GET | /schedules/paging | 페이징된 전체 일정 조회 |
 
 | API 이름   | Method | URL       | 설명    |
 |----------|-----|-----------|-------|

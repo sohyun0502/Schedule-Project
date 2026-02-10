@@ -7,6 +7,7 @@ import kr.spartaclub.scheduleproject.entity.Comment;
 import kr.spartaclub.scheduleproject.entity.Schedule;
 import kr.spartaclub.scheduleproject.entity.User;
 import kr.spartaclub.scheduleproject.repository.CommentRepository;
+import kr.spartaclub.scheduleproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +19,7 @@ import java.util.List;
 public class CommentService {
 
     private final CommentRepository commentRepository;
-    private final UserService userService;
+    private final UserRepository userRepository;
     private final ScheduleQueryService scheduleQueryService;
 
     // 댓글 생성
@@ -29,7 +30,9 @@ public class CommentService {
         Schedule schedule = scheduleQueryService.getScheduleByIdOrThrow(scheduleId);
 
         // 해당 유저 조회
-        User user = userService.getUserByIdOrThrow(userId);
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new IllegalStateException("없는 유저입니다.")
+        );
 
         // 한 일정 당 댓글 개수 count
         int commentCount = commentRepository.countByScheduleId(scheduleId);
@@ -78,5 +81,15 @@ public class CommentService {
     @Transactional(readOnly = true)
     public int countComment(Long scheduleId) {
         return commentRepository.countByScheduleId(scheduleId);
+    }
+
+    @Transactional
+    public void deleteCommentByUserId(Long userId) {
+        commentRepository.deleteByUserId(userId);
+    }
+
+    @Transactional
+    public void deleteCommentByScheduleId(Long scheduleId) {
+        commentRepository.deleteByScheduleId(scheduleId);
     }
 }

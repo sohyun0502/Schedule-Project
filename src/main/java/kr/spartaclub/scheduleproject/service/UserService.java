@@ -4,6 +4,8 @@ import jakarta.validation.Valid;
 import kr.spartaclub.scheduleproject.config.PasswordEncoder;
 import kr.spartaclub.scheduleproject.dto.user.*;
 import kr.spartaclub.scheduleproject.entity.User;
+import kr.spartaclub.scheduleproject.repository.CommentRepository;
+import kr.spartaclub.scheduleproject.repository.ScheduleRepository;
 import kr.spartaclub.scheduleproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,8 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final ScheduleService scheduleService;
+    private final CommentService commentService;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -117,14 +121,10 @@ public class UserService {
         if (!existence) {
             throw new IllegalStateException("없는 유저입니다.");
         }
+        // 유저 삭제시 해당 user_id의 일정과 댓글 모두 삭제
+        commentService.deleteCommentByUserId(id);
+        scheduleService.deleteScheduleById(id);
         userRepository.deleteById(id);
-    }
-
-    @Transactional(readOnly = true)
-    public User getUserByIdOrThrow(Long userId) {
-        return userRepository.findById(userId).orElseThrow(
-                () -> new IllegalStateException("없는 유저입니다.")
-        );
     }
 
 }

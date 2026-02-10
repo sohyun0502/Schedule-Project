@@ -6,6 +6,7 @@ import kr.spartaclub.scheduleproject.entity.Comment;
 import kr.spartaclub.scheduleproject.entity.Schedule;
 import kr.spartaclub.scheduleproject.entity.User;
 import kr.spartaclub.scheduleproject.repository.ScheduleRepository;
+import kr.spartaclub.scheduleproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,12 +23,14 @@ public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
     private final CommentService commentService;
-    private final UserService userService;
+    private final UserRepository userRepository;
 
     // 일정 생성
     @Transactional
     public CreateScheduleResponse saveSchedule(Long userId, CreateScheduleRequest request) {
-        User user = userService.getUserByIdOrThrow(userId);
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new IllegalStateException("없는 유저입니다.")
+        );
 
         Schedule schedule = new Schedule(
                 user,
@@ -47,16 +50,12 @@ public class ScheduleService {
         );
     }
 
-    // 일정 조회 - 유저별 일정 단건 조회
+    // 일정 조회 - 일정 단건 조회
     @Transactional(readOnly = true)
-    public GetOneScheduleResponse getSchedule(Long userId, Long id) {
+    public GetOneScheduleResponse getSchedule(Long id) {
         Schedule schedule = scheduleRepository.findById(id).orElseThrow(
                 () -> new IllegalStateException("없는 일정입니다.")
         );
-
-        if (!schedule.getUser().getId().equals(userId)) {
-            throw new IllegalArgumentException("작성자와 로그인 유저가 다릅니다.");
-        }
 
         // 선택한 일정의 댓글 리스트 조회
         List<Comment> commentList = commentService.getCommentList(id);
@@ -81,10 +80,10 @@ public class ScheduleService {
         );
     }
 
-    // 일정 조회 - 유저별 일정 전체 조회
+    // 일정 조회 - 일정 전체 조회
     @Transactional(readOnly = true)
-    public List<GetAllScheduleResponse> getSchedules(Long userId) {
-        List<Schedule> schedules = scheduleRepository.findAllByUserIdOrderByModifiedAtDesc(userId);
+    public List<GetAllScheduleResponse> getSchedules() {
+        List<Schedule> schedules = scheduleRepository.findAllByOrderByModifiedAtDesc();
 
         return schedules.stream().map(
                 schedule -> new GetAllScheduleResponse(
@@ -137,13 +136,15 @@ public class ScheduleService {
         }
 
         // 삭제
+        commentService.deleteCommentByScheduleId(id);
         scheduleRepository.deleteById(id);
     }
 
+    // 페이징된 일정 조회
     @Transactional(readOnly = true)
-    public Page<GetPageableScheduleResponse> getPageableSchedules(Long userId, int page, int size) {
+    public Page<GetPageableScheduleResponse> getPageableSchedules(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("modifiedAt").descending());
-        Page<Schedule> schedules = scheduleRepository.findAllByUserId(userId, pageable);
+        Page<Schedule> schedules = scheduleRepository.findAll(pageable);
 
         return schedules.map(
                 schedule -> new GetPageableScheduleResponse(
@@ -156,5 +157,14 @@ public class ScheduleService {
                         schedule.getModifiedAt()
                 )
         );
+    }
+
+    @Transactional
+    public void deleteScheduleById(Long userId) {
+        List<Schedule> schedules = scheduleRepository.findAllByUserIdOrderByModifiedAtDesc(userId);
+        for (Schedule schedule : schedules) {
+            commentService.deleteCommentByScheduleId(schedule.getId());
+        }
+        scheduleRepository.deleteByUserId(userId);
     }
 }

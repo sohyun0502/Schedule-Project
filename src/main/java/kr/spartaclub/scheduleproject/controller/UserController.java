@@ -17,7 +17,7 @@ public class UserController {
 
     private final UserService userService;
 
-    // 유저 저장 (회원가입)
+    // 유저 생성 (회원가입)
     @PostMapping("/signup")
     public ResponseEntity<SignupResponse> signup(@Valid @RequestBody SignupRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.signup(request));
