@@ -511,7 +511,7 @@ Content-Type: application/json
 
 ### 📋 ERD
 
-<img src="./Schedule-Project.png" width="900" height="600"/>
+<img src="./Schedule-Project2.png" width="1000" height="600"/>
 
 ---
 
