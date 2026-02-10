@@ -31,14 +31,172 @@ Content-Type: application/json
 
 ## 📌 API 목록
 
-| API 이름 | Method | URL        | 설명    |
-|-------|------|------------|-------|
-| 일정 생성 | POST | /schedules | 일정 생성 |
-| 선택 일정 조회 | GET  | /schedules/{id} | 일정 단건 조회 |
-| 전체 일정 조회 | GET  | /schedules | 전체 일정 조회 |
-| 일정 수정 | PUT  | /schedules/{id} | 선택한 일정 수정 |
-| 일정 삭제 | DELETE | /schedules/{id} | 선택한 일정 삭제 |
-| 댓글 생성 | POST | /schedules/{scheduleId}/comments | 댓글 생성 |
+| API 이름 | Method | URL     | 설명      |
+|------|------|---------|---------|
+| 회원가입 | POST | /signup | 유저 생성   |
+| 로그인  | POST | /login  | 유저 로그인  |
+| 유저 단건 조회 | GET  | /users/me | 로그인한 유저 정보 조회 |
+| 유저 전체 조회 | GET  | /users  | 모든 유저 조회 |
+| 유저 수정 | PUT  | /users/me | 로그인한 유저 정보 수정 |
+| 유저 삭제 | DELETE  | /users/me | 로그인한 유저 삭제 |
+
+| API 이름    | Method | URL       | 설명          |
+|-----------|-----|-----------|-------------|
+| 일정 생성     | POST | /schedules | 일정 생성       |
+| 선택 일정 조회  | GET | /schedules/{id} | 일정 단건 조회    |
+| 전체 일정 조회  | GET | /schedules | 전체 일정 조회    |
+| 일정 수정     | PUT | /schedules/{id} | 선택한 일정 수정   |
+| 일정 삭제     | DELETE | /schedules/{id} | 선택한 일정 삭제   |
+| 일정 페이징 조회 | GET | /schedules/paging | 유저별 페이징된 전체 일정 조회 |
+
+| API 이름   | Method | URL       | 설명    |
+|----------|-----|-----------|-------|
+| 댓글 생성    | POST | /schedules/{scheduleId}/comments | 댓글 생성 |
+| 댓글 전체 조회 | GET | /comments | 유저별 댓글 전체 조회 |
+
+---
+
+## 1️⃣ 회원가입 API
+
+### 🔹 API 정보
+- **API 명**: 회원가입
+- **Method**: `POST`
+- **URL**: `/signup`
+
+### 🔹 Request Example
+```json
+{
+  "name":"김삿갓",
+  "email":"kim@gmail.com",
+  "password":"43214321"
+}
+```
+
+### 🔹 Response Example (201 Created)
+```json
+{
+  "id": 1,
+  "name": "김삿갓",
+  "email": "kim@gmail.com",
+  "createdAt": "2026-02-10T10:17:32.1350535",
+  "modifiedAt": "2026-02-10T10:17:32.1350535"
+}
+```
+
+---
+
+## 2️⃣ 로그인 API
+
+### 🔹 API 정보
+- **API 명**: 로그인
+- **Method**: `POST`
+- **URL**: `/login`
+- **설명**: 로그인 성공 시 서버는 세션을 생성하고 JSESSIONID 쿠키를 통해 인증 상태를 유지한다
+
+### 🔹 Request Example
+```json
+{
+  "email": "kim@gmail.com",
+  "password": "43214321"
+}
+```
+
+### 🔹 Response Example (200 OK)
+```json
+
+```
+
+---
+
+## 3️⃣ 유저 단건 조회 API
+
+### 🔹 API 정보
+- **API 명**: 유저 단건 조회
+- **Method**: `GET`
+- **URL**: `/users/me`
+
+### 🔹 Response Example (200 OK)
+```json
+{
+    "id": 1,
+    "name": "김삿갓",
+    "email": "kim@gmail.com",
+    "createdAt": "2026-02-10T10:17:32.135054",
+    "modifiedAt": "2026-02-10T10:17:32.135054"
+}
+```
+
+---
+
+## 4️⃣ 유저 전체 조회 API
+
+### 🔹 API 정보
+- **API 명**: 유저 전체 조회
+- **Method**: `GET`
+- **URL**: `/users`
+
+### 🔹 Response Example (200 OK)
+```json
+[
+  {
+    "id": 1,
+    "name": "김삿갓",
+    "email": "kim@gmail.com",
+    "createdAt": "2026-02-10T10:17:32.135054",
+    "modifiedAt": "2026-02-10T10:17:32.135054"
+  },
+  {
+    "id": 2,
+    "name": "홍길동",
+    "email": "hong@gmail.com",
+    "createdAt": "2026-02-10T10:22:07.019531",
+    "modifiedAt": "2026-02-10T10:22:07.019531"
+  }
+]
+```
+
+---
+
+## 5️⃣ 유저 수정 API
+
+### 🔹 API 정보
+- **API 명**: 유저 수정
+- **Method**: `PUT`
+- **URL**: `/users/me`
+
+### 🔹 Request Example
+```json
+{
+    "name":"김삿갓",
+    "email":"satgat@gmail.com",
+    "password":"12121212"
+}
+```
+
+### 🔹 Response Example (200 OK)
+```json
+{
+  "id": 1,
+  "name": "김삿갓",
+  "email": "satgat@gmail.com",
+  "createdAt": "2026-02-10T10:17:32.135054",
+  "modifiedAt": "2026-02-10T10:17:32.135054"
+}
+```
+
+---
+
+## 6️⃣ 유저 삭제 API
+
+### 🔹 API 정보
+- **API 명**: 유저 삭제
+- **Method**: `DELETE`
+- **URL**: `/users/me`
+
+### 🔹 Response Example (204 No Content)
+```json
+
+```
 
 ---
 
@@ -52,22 +210,20 @@ Content-Type: application/json
 ### 🔹 Request Example
 ```json
 {
-  "title": "오늘의 일정",
-  "content": "헬스 PT 8시",
-  "name": "홍길동",
-  "password": "password123"
+  "title": "나의 하루3",
+  "content": "점심 약속 11시"
 }
 ```
 
 ### 🔹 Response Example (201 Created)
 ```json
 {
-  "id": 1,
-  "title": "오늘의 일정",
-  "content": "헬스 PT 8시",
+  "id": 3,
+  "title": "나의 하루3",
+  "content": "점심 약속 11시",
   "name": "홍길동",
-  "createdAt": "2026-01-30T20:26:01.5576386",
-  "modifiedAt": "2026-01-30T20:26:01.5576386"
+  "createdAt": "2026-02-10T10:48:00.9219948",
+  "modifiedAt": "2026-02-10T10:48:00.9219948"
 }
 ```
 
@@ -88,19 +244,26 @@ Content-Type: application/json
 ### 🔹 Response Example (200 OK)
 ```json
 {
-  "id": 2,
-  "title": "오늘의 일정2",
-  "content": "공휴일",
-  "name": "김모씨",
-  "createdAt": "2026-01-31T14:27:17.430227",
-  "modifiedAt": "2026-01-31T14:27:17.430227",
+  "id": 1,
+  "title": "나의 하루",
+  "content": "점심 약속 12시",
+  "name": "홍길동",
+  "createdAt": "2026-02-10T10:35:50.389632",
+  "modifiedAt": "2026-02-10T10:35:50.389632",
   "comments": [
     {
       "id": 1,
       "content": "댓글1",
-      "name": "김모씨",
-      "createdAt": "2026-01-31T14:46:09.384358",
-      "modifiedAt": "2026-01-31T14:46:09.384358"
+      "name": "홍길동",
+      "createdAt": "2026-02-10T10:39:11.003731",
+      "modifiedAt": "2026-02-10T10:39:11.003731"
+    },
+    {
+      "id": 2,
+      "content": "댓글2",
+      "name": "홍길동",
+      "createdAt": "2026-02-10T10:40:10.256678",
+      "modifiedAt": "2026-02-10T10:40:10.256678"
     }
   ]
 }
@@ -115,29 +278,24 @@ Content-Type: application/json
 - **Method**: `GET`
 - **URL**: `/schedules`
 
-### 🔹 Query Parameter
-| 이름 | 타입 | 필수 | 설명  |
-|----|----|---|-----|
-| name | String | X | 작성자명 |
-
 ### 🔹 Response Example (200 OK)
 ```json
 [
   {
     "id": 2,
-    "title": "오늘의 일정2",
-    "content": "공휴일",
-    "name": "김모씨",
-    "createdAt": "2026-01-30T20:31:24.547735",
-    "modifiedAt": "2026-01-30T20:31:24.547735"
+    "title": "나의 하루2",
+    "content": "점심 약속 11시",
+    "name": "홍길동",
+    "createdAt": "2026-02-10T10:35:57.30031",
+    "modifiedAt": "2026-02-10T10:35:57.30031"
   },
   {
     "id": 1,
-    "title": "오늘의 일정",
-    "content": "헬스 PT 8시",
+    "title": "나의 하루",
+    "content": "점심 약속 12시",
     "name": "홍길동",
-    "createdAt": "2026-01-30T20:26:01.557639",
-    "modifiedAt": "2026-01-30T20:26:01.557639"
+    "createdAt": "2026-02-10T10:35:50.389632",
+    "modifiedAt": "2026-02-10T10:35:50.389632"
   }
 ]
 ```
@@ -159,9 +317,8 @@ Content-Type: application/json
 ### 🔹 Request Example
 ```json
 {
-  "title":"오늘의 일정3",
-  "name":"김길동",
-  "password":"password123"
+  "title":"오늘의 일정2",
+  "content":"수정한 내용"
 }
 ```
 
@@ -169,11 +326,11 @@ Content-Type: application/json
 ```json
 {
   "id": 1,
-  "title": "오늘의 일정3",
-  "content": "헬스 PT 8시",
-  "name": "김길동",
-  "createdAt": "2026-01-31T14:26:11.838603",
-  "modifiedAt": "2026-01-31T14:26:11.838603"
+  "title": "오늘의 일정2",
+  "content": "수정한 내용",
+  "name": "홍길동",
+  "createdAt": "2026-02-10T10:35:50.389632",
+  "modifiedAt": "2026-02-10T10:35:50.389632"
 }
 ```
 
@@ -191,13 +348,6 @@ Content-Type: application/json
 |----|----|----|-------|
 | id | Long | O | 일정 ID |
 
-### 🔹 Request Example
-```json
-{
-  "password":"password123"
-}
-```
-
 ### 🔹 Response Example (204 No Content)
 ```json
 
@@ -205,7 +355,73 @@ Content-Type: application/json
 
 ---
 
-## 6️⃣ 댓글 생성 API
+## 6️⃣ 일정 페이징 조회 API
+
+### 🔹 API 정보
+- **API 명**: 유저별 페이징된 전체 일정 조회
+- **Method**: `GET`
+- **URL**: `/schedules/paging`
+
+### 🔹 Query Parameter
+| 이름   | 타입  | 필수 | 설명 | 디폴트 값 |
+|------|-----|---|----|----|
+| page | int | X | 페이지 번호 | 0  |
+| size | int | X | 페이지 크기 | 10 |
+
+### 🔹 Response Example (204 No Content)
+```json
+{
+  "content": [
+    {
+      "id": 2,
+      "title": "나의 하루2",
+      "content": "점심 약속 11시",
+      "commentCount": 0,
+      "name": "홍길동",
+      "createdAt": "2026-02-10T10:35:57.30031",
+      "modifiedAt": "2026-02-10T10:35:57.30031"
+    },
+    {
+      "id": 1,
+      "title": "나의 하루",
+      "content": "점심 약속 12시",
+      "commentCount": 0,
+      "name": "홍길동",
+      "createdAt": "2026-02-10T10:35:50.389632",
+      "modifiedAt": "2026-02-10T10:35:50.389632"
+    }
+  ],
+  "empty": false,
+  "first": true,
+  "last": true,
+  "number": 0,
+  "numberOfElements": 2,
+  "pageable": {
+    "offset": 0,
+    "pageNumber": 0,
+    "pageSize": 10,
+    "paged": true,
+    "sort": {
+      "empty": false,
+      "sorted": true,
+      "unsorted": false
+    },
+    "unpaged": false
+  },
+  "size": 10,
+  "sort": {
+    "empty": false,
+    "sorted": true,
+    "unsorted": false
+  },
+  "totalElements": 2,
+  "totalPages": 1
+}
+```
+
+---
+
+## 1️⃣ 댓글 생성 API
 
 ### 🔹 API 정보
 - **API 명**: 댓글 생성
@@ -220,21 +436,48 @@ Content-Type: application/json
 ### 🔹 Request Example
 ```json
 {
-  "content":"댓글1",
-  "name":"김모씨",
-  "password":"1111"
+  "content":"댓글3"
 }
 ```
 
 ### 🔹 Response Example (201 Created)
 ```json
 {
-  "id": 1,
-  "content": "댓글1",
-  "name": "김모씨",
-  "createdAt": "2026-01-31T14:46:09.3843582",
-  "modifiedAt": "2026-01-31T14:46:09.3843582"
+  "id": 3,
+  "content": "댓글3",
+  "name": "홍길동",
+  "createdAt": "2026-02-10T10:52:20.5170414",
+  "modifiedAt": "2026-02-10T10:52:20.5170414"
 }
+```
+
+---
+
+## 2️⃣ 댓글 전체 조회 API
+
+### 🔹 API 정보
+- **API 명**: 유저별 댓글 전체 조회
+- **Method**: `GET`
+- **URL**: `/comments`
+
+### 🔹 Response Example (200 OK)
+```json
+[
+  {
+    "id": 2,
+    "content": "댓글2",
+    "name": "홍길동",
+    "createdAt": "2026-02-10T10:40:10.256678",
+    "modifiedAt": "2026-02-10T10:40:10.256678"
+  },
+  {
+    "id": 1,
+    "content": "댓글1",
+    "name": "홍길동",
+    "createdAt": "2026-02-10T10:39:11.003731",
+    "modifiedAt": "2026-02-10T10:39:11.003731"
+  }
+]
 ```
 
 ---
@@ -258,8 +501,9 @@ Content-Type: application/json
 
 ### 🛢️ 테이블 구성
 
-| 테이블명      | 설명    |
-|-----------|-------|
+| 테이블명      | 설명              |
+|-----------|-----------------|
+| users     | 유저 정보를 저장하는 테이블 |
 | schedules | 일정 정보를 저장하는 테이블 |
 | comments  | 일정에 종속된 댓글 정보를 저장하는 테이블 |
 

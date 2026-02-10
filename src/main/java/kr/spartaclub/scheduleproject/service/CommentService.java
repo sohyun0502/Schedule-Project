@@ -7,8 +7,6 @@ import kr.spartaclub.scheduleproject.entity.Comment;
 import kr.spartaclub.scheduleproject.entity.Schedule;
 import kr.spartaclub.scheduleproject.entity.User;
 import kr.spartaclub.scheduleproject.repository.CommentRepository;
-import kr.spartaclub.scheduleproject.repository.ScheduleRepository;
-import kr.spartaclub.scheduleproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
