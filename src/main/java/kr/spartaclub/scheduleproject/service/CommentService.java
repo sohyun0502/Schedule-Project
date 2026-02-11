@@ -79,11 +79,6 @@ public class CommentService {
         return commentRepository.findByScheduleId(id);
     }
 
-    @Transactional(readOnly = true)
-    public int countComment(Long scheduleId) {
-        return commentRepository.countByScheduleId(scheduleId);
-    }
-
     @Transactional
     public void deleteCommentByUserId(Long userId) {
         commentRepository.deleteByUserId(userId);
