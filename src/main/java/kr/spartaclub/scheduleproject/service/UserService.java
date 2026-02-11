@@ -43,7 +43,6 @@ public class UserService {
                 savedUser.getId(),
                 savedUser.getName(),
                 savedUser.getEmail(),
-                savedUser.getPassword(),
                 savedUser.getCreatedAt(),
                 savedUser.getModifiedAt()
         );
