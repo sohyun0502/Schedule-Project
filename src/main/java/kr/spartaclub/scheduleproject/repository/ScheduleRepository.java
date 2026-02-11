@@ -17,8 +17,8 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     // 유저별 전체 조회 (수정일 내림차순)
     List<Schedule> findAllByUserIdOrderByModifiedAtDesc(Long userId);
 
-    // 페이징된 일정 전체 조회
-    Page<Schedule> findAll(Pageable pageable);
+    // 페이징된 일정 전체 조회 (수정일 내림차순)
+    Page<Schedule> findAllByOrderByModifiedAtDesc(Pageable pageable);
 
     void deleteByUserId(Long userId);
 }

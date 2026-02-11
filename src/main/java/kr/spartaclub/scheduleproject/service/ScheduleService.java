@@ -142,7 +142,7 @@ public class ScheduleService {
     @Transactional(readOnly = true)
     public Page<GetPageableScheduleResponse> getPageableSchedules(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("modifiedAt").descending());
-        Page<Schedule> schedules = scheduleRepository.findAll(pageable);
+        Page<Schedule> schedules = scheduleRepository.findAllByOrderByModifiedAtDesc(pageable);
 
         return schedules.map(
                 schedule -> new GetPageableScheduleResponse(
